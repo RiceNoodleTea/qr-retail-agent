@@ -1,0 +1,41 @@
+{
+  "reviews": [
+    {
+      "productId": "chronos-elite",
+      "ratingAvg": 4.6,
+      "ratingCount": 1284,
+      "pros": ["Clarity and scratch resistance", "Comfortable strap", "Quiet movement"],
+      "cons": ["Strap break-in time", "Occasional minor accuracy drift"],
+      "notableQuotes": [
+        "Most users find the sapphire crystal exceptionally scratch-resistant, noting it maintains clarity after years of daily wear.",
+        "The most comfortable leather strap I've ever worn. It molded to my wrist within two days.",
+        "Finishing exceeds expectations for a tool watch in this price bracket."
+      ]
+    },
+    {
+      "productId": "vanguard-classic",
+      "ratingAvg": 4.3,
+      "ratingCount": 842,
+      "pros": ["Reliable battery", "Great readability", "Solid value"],
+      "cons": ["Less premium crystal", "Limited strap options"],
+      "notableQuotes": [
+        "Battery life makes it an easy daily pick.",
+        "Dial is extremely readable in all lighting.",
+        "Feels like a practical, no-drama watch."
+      ]
+    },
+    {
+      "productId": "atlas-lite",
+      "ratingAvg": 4.2,
+      "ratingCount": 512,
+      "pros": ["Affordable", "Comfortable", "Durable for the price"],
+      "cons": ["Basic finishing", "Mineral crystal scratches easier"],
+      "notableQuotes": [
+        "Perfect if you want something that just works.",
+        "Great value, but don’t expect luxury finishing.",
+        "Battery surprised me in a good way."
+      ]
+    }
+  ]
+}
+

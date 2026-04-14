@@ -1,0 +1,102 @@
+{
+  "products": [
+    {
+      "id": "chronos-elite",
+      "name": "Chronos Elite",
+      "currency": "USD",
+      "price": 899,
+      "summary": "The ultimate synthesis of temporal precision and aesthetic restraint. Crafted for those who value every second.",
+      "differentiators": [
+        "Sapphire crystal clarity",
+        "Whisper-quiet automatic movement",
+        "All-day comfort leather strap"
+      ],
+      "specs": [
+        { "label": "Case", "value": "40mm stainless steel" },
+        { "label": "Crystal", "value": "Sapphire" },
+        { "label": "Movement", "value": "Automatic" },
+        { "label": "Water resistance", "value": "5 ATM" },
+        { "label": "Warranty", "value": "2 years" }
+      ],
+      "heroImageSrc": "/next.svg",
+      "variants": [
+        {
+          "id": "black",
+          "name": "Black",
+          "chip": "#1f1f1f",
+          "imageFilter": "hue-rotate(0deg) saturate(1.05)"
+        },
+        {
+          "id": "sand",
+          "name": "Sand",
+          "chip": "#d7c7a8",
+          "imageFilter": "hue-rotate(30deg) saturate(0.95) brightness(1.05)"
+        },
+        {
+          "id": "sage",
+          "name": "Sage",
+          "chip": "#8f9e84",
+          "imageFilter": "hue-rotate(95deg) saturate(1.0)"
+        }
+      ],
+      "comparableProductIds": ["vanguard-classic", "atlas-lite"],
+      "bundles": [
+        {
+          "id": "bundle-travel",
+          "title": "Travel Ready Bundle",
+          "items": ["Watch travel case", "Leather care kit"],
+          "bundlePrice": 949
+        }
+      ]
+    },
+    {
+      "id": "vanguard-classic",
+      "name": "Vanguard Classic",
+      "currency": "USD",
+      "price": 1250,
+      "summary": "A refined daily driver focused on battery convenience and clean utility.",
+      "differentiators": ["48h battery focus", "Classic dial readability", "Everyday versatility"],
+      "specs": [
+        { "label": "Crystal", "value": "Mineral" },
+        { "label": "Battery", "value": "48h" },
+        { "label": "Water resistance", "value": "3 ATM" }
+      ],
+      "heroImageSrc": "/next.svg",
+      "variants": [
+        {
+          "id": "steel",
+          "name": "Steel",
+          "chip": "#9aa3ad",
+          "imageFilter": "hue-rotate(0deg) saturate(0.9) brightness(1.05)"
+        }
+      ],
+      "comparableProductIds": ["chronos-elite", "atlas-lite"],
+      "bundles": []
+    },
+    {
+      "id": "atlas-lite",
+      "name": "Atlas Lite",
+      "currency": "USD",
+      "price": 690,
+      "summary": "A value-first option with strong durability basics and great day-to-day comfort.",
+      "differentiators": ["Accessible price", "72h battery", "Durable build"],
+      "specs": [
+        { "label": "Crystal", "value": "Mineral" },
+        { "label": "Battery", "value": "72h" },
+        { "label": "Water resistance", "value": "5 ATM" }
+      ],
+      "heroImageSrc": "/next.svg",
+      "variants": [
+        {
+          "id": "graphite",
+          "name": "Graphite",
+          "chip": "#3a3f46",
+          "imageFilter": "hue-rotate(0deg) saturate(1.0)"
+        }
+      ],
+      "comparableProductIds": ["chronos-elite", "vanguard-classic"],
+      "bundles": []
+    }
+  ]
+}
+

@@ -1,0 +1,21 @@
+{
+  "stock": [
+    {
+      "productId": "chronos-elite",
+      "variants": [
+        { "variantId": "black", "available": true, "qty": 6 },
+        { "variantId": "sand", "available": true, "qty": 2 },
+        { "variantId": "sage", "available": false, "qty": 0 }
+      ]
+    },
+    {
+      "productId": "vanguard-classic",
+      "variants": [{ "variantId": "steel", "available": true, "qty": 4 }]
+    },
+    {
+      "productId": "atlas-lite",
+      "variants": [{ "variantId": "graphite", "available": true, "qty": 9 }]
+    }
+  ]
+}
+
