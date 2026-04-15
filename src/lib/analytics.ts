@@ -50,8 +50,14 @@ const ANALYTICS_DIR = "analytics";
 const EVENTS_FILE = "analytics/events.jsonl";
 
 export async function recordEvent(event: SessionEvent) {
-  await ensureDir(ANALYTICS_DIR);
-  await appendJsonl(EVENTS_FILE, event);
+  try {
+    await ensureDir(ANALYTICS_DIR);
+    await appendJsonl(EVENTS_FILE, event);
+  } catch (err) {
+    // In serverless/edge environments the filesystem may be read-only.
+    // Analytics should never break the customer experience.
+    console.warn("analytics_write_failed", { err });
+  }
 }
 
 export async function listEvents(): Promise<SessionEvent[]> {
