@@ -207,6 +207,39 @@ export function buildTools() {
         return { ok: true };
       },
     }),
+
+    startPurchase: tool({
+      description:
+        "Leads the user to make a purchase. Returns concise in-store checkout steps and captures purchase intent.",
+      inputSchema: z.object({
+        sessionId: z.string(),
+        productId: z.string(),
+        variantId: z.string().optional(),
+        bundleId: z.string().optional(),
+      }),
+      execute: async ({ sessionId, productId, variantId, bundleId }) => {
+        await recordEvent({
+          type: "purchase_start",
+          sessionId,
+          at: new Date().toISOString(),
+          productId,
+          variantId,
+          bundleId,
+        });
+
+        return {
+          ok: true,
+          nextSteps: [
+            "Go to the counter (or ask me to ping staff).",
+            "Show the product to the associate and say: “I’m ready to check out.”",
+            variantId ? `Tell them your preferred variant: ${variantId}.` : "Tell them your preferred color/variant.",
+            bundleId ? `Ask for bundle: ${bundleId}.` : "If you want add-ons, ask for the best-value bundle.",
+            "If you have a deal QR from me, show it before they ring you up.",
+          ],
+          receiptHint: "If you’d like, I can recap your choice in one line for the associate.",
+        };
+      },
+    }),
   };
 }
 

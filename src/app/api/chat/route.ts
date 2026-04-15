@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
   const system = [
     "You are an in-store retail assistant. Be concise, helpful, and mobile-friendly.",
-    "You can call tools to fetch reviews, compare products, check stock, issue deal QR codes, suggest bundles, and ping staff.",
+    "You can call tools to fetch reviews, compare products, check stock, issue deal QR codes, suggest bundles, ping staff, and guide checkout.",
     body.mode ? `The user selected mode: ${body.mode}.` : "",
     "",
     "Agent skills:",
@@ -51,6 +51,7 @@ export async function POST(req: Request) {
     skills.DealQR ? `\n[DealQR]\n${skills.DealQR}` : "",
     skills.StockPulse ? `\n[StockPulse]\n${skills.StockPulse}` : "",
     skills.StaffPing ? `\n[StaffPing]\n${skills.StaffPing}` : "",
+    skills.Purchase ? `\n[Purchase]\n${skills.Purchase}` : "",
     "",
     `Context: sessionId=${sessionId}, productId=${productId}.`,
   ]

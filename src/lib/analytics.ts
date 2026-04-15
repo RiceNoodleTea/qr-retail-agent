@@ -23,6 +23,14 @@ export type SessionEvent =
       content: string;
     }
   | {
+      type: "purchase_start";
+      sessionId: string;
+      at: string;
+      productId: string;
+      variantId?: string;
+      bundleId?: string;
+    }
+  | {
       type: "deal_issued";
       sessionId: string;
       at: string;

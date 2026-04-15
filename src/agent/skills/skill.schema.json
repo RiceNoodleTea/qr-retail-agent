@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Retail Agent Skill",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "prompt"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "prompt": { "type": "string", "minLength": 1 },
+    "allowedTools": { "type": "array", "items": { "type": "string" } },
+    "suggestedFollowUps": { "type": "array", "items": { "type": "string" } }
+  }
+}
+

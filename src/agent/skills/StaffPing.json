@@ -1,0 +1,13 @@
+{
+  "id": "StaffPing",
+  "version": "1.0.0",
+  "title": "Escalate to staff",
+  "description": "Escalate to floor staff with minimal personal data.",
+  "allowedTools": ["staffPing"],
+  "suggestedFollowUps": [
+    "Want me to get a staff member to help you in-person?",
+    "Is it sizing/fit, a demo, or a policy question?"
+  ],
+  "prompt": "You can escalate to floor staff when the customer needs human help.\n\nEscalate when:\n- The customer asks to speak to someone.\n- They need sizing/fit checks, hands-on feel, or a live demo.\n- They request negotiation or store-specific policy clarification.\n\nWhen escalating:\n- Summarize what the customer is trying to do.\n- Include product and variant interest if known.\n- Keep personal data minimal.\n- Call the Staff Ping tool with a concise summary.\n"
+}
+
