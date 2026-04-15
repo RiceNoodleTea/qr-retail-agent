@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-
-type AgentMode = "deals" | "compare" | "reviews" | "find";
+import { useChatClient } from "@/components/agent/ChatClient";
 
 export type AgentProduct = {
   id: string;
@@ -16,16 +15,6 @@ export type AgentProduct = {
 type Props = {
   product: AgentProduct;
 };
-
-function getModeFromLocation(): AgentMode | null {
-  if (typeof window === "undefined") return null;
-  const mode = new URLSearchParams(window.location.search).get("mode");
-  if (mode === "deals") return "deals";
-  if (mode === "compare") return "compare";
-  if (mode === "reviews") return "reviews";
-  if (mode === "find") return "find";
-  return null;
-}
 
 function formatMoneyUSD(amount: number) {
   return new Intl.NumberFormat("en-US", {
@@ -399,44 +388,54 @@ function FindGuide() {
 }
 
 export function AgentPanel({ product }: Props) {
-  const [mode, setMode] = useState<AgentMode>(
-    () => getModeFromLocation() ?? "reviews"
-  );
+  const chat = useChatClient();
+  const mode = chat.mode;
+  const setMode = chat.setMode;
 
   return (
     <div className="rounded-[28px] bg-white shadow-sm ring-1 ring-black/5 p-5">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <div className="text-sm font-semibold">Assistant</div>
-          <div className="text-xs text-zinc-600">
-            Guided help for {product.name}
+      <div>
+        <div className="text-sm font-semibold">Assistant</div>
+        <div className="text-xs text-zinc-600">Guided help for {product.name}</div>
+      </div>
+
+      <div className="mt-4 grid gap-2">
+        {(
+          [
+            ["reviews", "Check Reviews", "💬"],
+            ["compare", "Compare Products", "⇄"],
+            ["find", "Find Another Product", "➜"],
+          ] as const
+        ).map(([id, label, icon]) => {
+          const active = mode === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setMode(id)}
+              className={[
+                "w-full rounded-2xl shadow-sm ring-1 px-4 py-4 flex items-center justify-between text-left",
+                active
+                  ? "bg-black text-white ring-black/10"
+                  : "bg-white text-zinc-900 ring-black/5",
+              ].join(" ")}
+              aria-pressed={active}
+            >
+              <div className="font-semibold">{label}</div>
+              <div className={active ? "text-white" : "text-zinc-900"}>{icon}</div>
+            </button>
+          );
+        })}
+
+        {mode === "deals" ? (
+          <div className="rounded-2xl bg-amber-50 ring-1 ring-amber-900/10 px-4 py-3 text-sm text-amber-950">
+            <div className="font-semibold">Deals mode</div>
+            <div className="mt-1">
+              You opened discounts/deals. Ask for a deal QR, bundle value, or stock
+              availability.
+            </div>
           </div>
-        </div>
-        <div className="flex gap-2">
-          {(
-            [
-              ["reviews", "Reviews"],
-              ["compare", "Compare"],
-              ["find", "Find"],
-              ["deals", "Deals"],
-            ] as const
-          ).map(([id, label]) => {
-            const active = mode === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setMode(id)}
-                className={[
-                  "rounded-full px-3 py-2 text-xs font-semibold ring-1 ring-black/5",
-                  active ? "bg-black text-white" : "bg-white text-zinc-900",
-                ].join(" ")}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
+        ) : null}
       </div>
 
       {mode === "reviews" ? <ReviewsGuide /> : null}
@@ -444,12 +443,48 @@ export function AgentPanel({ product }: Props) {
       {mode === "find" ? <FindGuide /> : null}
       {mode === "deals" ? <DealsGuide /> : null}
 
-      <div className="mt-5 rounded-2xl bg-zinc-50 ring-1 ring-black/5 p-4 text-sm text-zinc-700">
-        <div className="font-semibold text-zinc-900">Agent chat</div>
-        <p className="mt-1 leading-6">
-          Next step: connect this to streaming Claude responses and tool calls
-          (reviews, compare table, deal QR, stock pulse, bundles, staff ping).
-        </p>
+      <div className="mt-5 rounded-2xl bg-zinc-50 ring-1 ring-black/5 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="text-sm font-semibold text-zinc-900">Chat</div>
+          {chat.status === "streaming" ? (
+            <button
+              type="button"
+              onClick={chat.stop}
+              className="rounded-full bg-white px-3 py-2 text-xs font-semibold ring-1 ring-black/5"
+            >
+              Stop
+            </button>
+          ) : null}
+        </div>
+
+        {chat.error ? (
+          <div className="mt-3 rounded-2xl bg-rose-50 ring-1 ring-rose-900/10 px-4 py-3 text-sm text-rose-950">
+            <div className="font-semibold">Chat error</div>
+            <div className="mt-1 break-words">{chat.error}</div>
+          </div>
+        ) : null}
+
+        <div className="mt-3 grid gap-2">
+          {chat.messages.length === 0 ? (
+            <div className="text-sm text-zinc-600">
+              Type a message in the bar at the bottom to start.
+            </div>
+          ) : (
+            chat.messages.slice(-12).map((m) => (
+              <div
+                key={m.id}
+                className={[
+                  "rounded-2xl px-4 py-3 text-sm leading-6 break-words",
+                  m.role === "user"
+                    ? "bg-white ring-1 ring-black/5 text-zinc-900"
+                    : "bg-zinc-900 text-white",
+                ].join(" ")}
+              >
+                {m.content || (m.role === "assistant" ? "…" : "")}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

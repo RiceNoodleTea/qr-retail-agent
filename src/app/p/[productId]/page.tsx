@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { AgentPanel } from "@/components/agent/AgentPanel";
+import { ChatProvider, useChatClient } from "@/components/agent/ChatClient";
 
 type Variant = {
   id: string;
@@ -93,6 +94,32 @@ export default function ProductPage() {
   };
 
   return (
+    <ChatProvider productId={MOCK_PRODUCT.id}>
+      <ProductPageInner
+        variantId={variantId}
+        setVariantId={setVariantId}
+        scrollToAgent={scrollToAgent}
+        variantImageFilter={variant?.imageFilter ?? ""}
+      />
+    </ChatProvider>
+  );
+}
+
+function ProductPageInner({
+  variantId,
+  setVariantId,
+  scrollToAgent,
+  variantImageFilter,
+}: {
+  variantId: string | undefined;
+  setVariantId: (id: string) => void;
+  scrollToAgent: (mode: "deals" | "compare" | "reviews") => void;
+  variantImageFilter: string;
+}) {
+  const chat = useChatClient();
+  const [input, setInput] = useState("");
+
+  return (
     <div className="pb-28">
       <div className="rounded-[28px] bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
         <div className="p-5">
@@ -104,7 +131,7 @@ export default function ProductPage() {
                 fill
                 priority
                 className="object-contain"
-                style={{ filter: variant?.imageFilter }}
+                style={{ filter: variantImageFilter }}
               />
             </div>
           </div>
@@ -121,7 +148,7 @@ export default function ProductPage() {
 
             <div className="flex items-center gap-2 pt-2">
               {MOCK_PRODUCT.variants.map((v) => {
-                const selected = v.id === variant?.id;
+                const selected = v.id === variantId;
                 return (
                   <button
                     key={v.id}
@@ -142,6 +169,27 @@ export default function ProductPage() {
           <p className="mt-4 text-sm leading-6 text-zinc-600">
             {MOCK_PRODUCT.summary}
           </p>
+
+          <div className="mt-4 rounded-2xl bg-zinc-50 ring-1 ring-black/5 p-4">
+            <div className="text-xs font-semibold tracking-wide text-zinc-500">
+              Quick specs
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+              {MOCK_PRODUCT.specs.slice(0, 4).map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-xl bg-white ring-1 ring-black/5 px-3 py-2"
+                >
+                  <div className="text-[11px] font-semibold text-zinc-500">
+                    {s.label}
+                  </div>
+                  <div className="mt-0.5 font-medium text-zinc-900">
+                    {s.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-5 grid gap-2">
             <button
@@ -218,19 +266,33 @@ export default function ProductPage() {
 
       <div className="fixed left-0 right-0 bottom-0 pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto w-full max-w-[420px] px-4 pb-4">
-          <div className="rounded-full bg-white/90 backdrop-blur shadow-sm ring-1 ring-black/10 px-3 py-2 flex items-center gap-2">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const text = input.trim();
+              if (!text) return;
+              const el = document.getElementById("agent");
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              await chat.send(text);
+              setInput("");
+            }}
+            className="rounded-full bg-white/90 backdrop-blur shadow-sm ring-1 ring-black/10 px-3 py-2 flex items-center gap-2"
+          >
             <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="I want something else"
               className="flex-1 bg-transparent outline-none text-sm px-2 py-2"
             />
             <button
-              type="button"
-              className="h-10 w-10 rounded-full bg-amber-800 text-white grid place-items-center"
+              type="submit"
+              className="h-10 w-10 rounded-full bg-amber-800 text-white grid place-items-center disabled:opacity-50"
               aria-label="Send"
+              disabled={chat.status === "streaming"}
             >
-              ➤
+              {chat.status === "streaming" ? "…" : "➤"}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
